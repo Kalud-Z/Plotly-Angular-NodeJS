@@ -2,6 +2,11 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import Plotly from 'plotly.js-dist';
 
 
+interface Coordinates {
+  x_coord: number;
+  y_coord: number;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,7 +18,9 @@ import Plotly from 'plotly.js-dist';
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild("Graph", { static: true })  private Graph: ElementRef;
 
-  private animFrame;
+  private animFrame: any;
+
+  socket: any;
 
   private x_value = 10;
   private y_value = 1;
@@ -21,7 +28,41 @@ export class AppComponent implements OnInit, AfterViewInit {
   incrementing = true;
 
   ngOnInit(): void {
+
   }
+
+
+  openConnection() {
+    this.socket = new WebSocket('ws://localhost:8080');
+    this.socket.onerror = error => console.log('WebSocket error: ' + error);
+    this.socket.onclose = () => console.log('the server just closed the webSocket Connection');
+    this.socket.onopen = () => {
+      // this.startReceivingData();
+    }
+  }
+
+  startReceivingData() {
+    this.socket.send('start');
+
+    this.socket.onmessage = message => {
+      let data: Coordinates = JSON.parse(message.data);
+      console.log(data);
+      this.x_value = data.x_coord;
+      this.y_value = data.y_coord;
+      console.log('§§§§§§§§§§§§§§§§§§§§§§§§§§§§§');
+      this.startMoving();
+    };
+  }
+
+  closeConnection() {
+    this.socket.close()
+  }
+
+
+
+
+
+
 
   ngAfterViewInit() {
     this.initialize();
@@ -61,10 +102,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   update() {
-    this.compute();
-    console.log('x value : ' , this.x_value)
-    console.log('y value : ' , this.y_value)
-    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+    // this.compute();
+    // console.log('x value : ' , this.x_value)
+    // console.log('y value : ' , this.y_value)
+    // console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 
     Plotly.animate(this.Graph.nativeElement, {
       data: [{ x: [this.x_value], y: [this.y_value] } ]
@@ -78,7 +119,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.animFrame = requestAnimationFrame(this.update.bind(this));
+    // this.animFrame = requestAnimationFrame(this.update.bind(this));
   }
 
   startMoving() {
@@ -87,6 +128,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   stopMoving() {
     cancelAnimationFrame(this.animFrame);
+    this.socket.send('pause');
   }
 
 
