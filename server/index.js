@@ -28,6 +28,7 @@ socket.on('request', request => {
             startSendingData();
         }
     });
+
     connection.on('close', connection => {
         console.log('connection closed');
     });
@@ -40,7 +41,7 @@ function startSendingData() {
         setNextCoords();
         let obj = { x_coord: x_value,  y_coord: y_value };
         connection.sendUTF(JSON.stringify(obj));
-    }, 10);
+    }, 50);
 }
 
 function setNextCoords() {
@@ -58,7 +59,6 @@ function setNextCoords() {
 
     else if(x_value === 1) {
         incrementing = true;
-        console.log('we just reached 1 again')
     }
 
 }
@@ -66,3 +66,5 @@ function setNextCoords() {
 function stopSendingData() {
     clearInterval(interval);
 }
+
+

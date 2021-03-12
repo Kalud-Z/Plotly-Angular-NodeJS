@@ -18,6 +18,8 @@ interface Coordinates {
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild("Graph", { static: true })  private Graph: ElementRef;
 
+  connectionOpened = false;
+
   private animFrame: any;
 
   socket: any;
@@ -26,6 +28,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   private y_value = 1;
 
   incrementing = true;
+
+  markerSize: number = 20;
 
   ngOnInit(): void {
 
@@ -38,6 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.socket.onclose = () => console.log('the server just closed the webSocket Connection');
     this.socket.onopen = () => {
       // this.startReceivingData();
+      this.connectionOpened = true;
     }
   }
 
@@ -56,6 +61,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   closeConnection() {
     this.socket.close()
+    this.connectionOpened = false;
   }
 
 
@@ -78,9 +84,31 @@ export class AppComponent implements OnInit, AfterViewInit {
         size: 20,
       }
     }], {
-      xaxis: {range: [0, 100]},
-      yaxis: {range: [-5, 5]}
-    }, {showSendToCloud:true})
+      xaxis: {
+        range: [0, 100],
+        fixedrange: true,
+        title: {
+          text: 'range / cm',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        }
+      },
+      yaxis: {
+        fixedrange: true,
+        range: [-7, 7],
+        title: {
+          text: 'velocity / m/s',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        }
+      }
+    }, {displayModeBar: false} )
   }
 
   compute() {
@@ -106,9 +134,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     // console.log('x value : ' , this.x_value)
     // console.log('y value : ' , this.y_value)
     // console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+    this.setMarkerSize();
 
     Plotly.animate(this.Graph.nativeElement, {
-      data: [{ x: [this.x_value], y: [this.y_value] } ]
+      data: [
+        { x: [this.x_value],
+          y: [this.y_value],
+          marker: {
+            color: 'rgb(17, 157, 255)',
+            size: this.markerSize,
+          }
+        }
+        ]
     }, {
       transition: {
         duration: 10,
@@ -129,6 +166,22 @@ export class AppComponent implements OnInit, AfterViewInit {
   stopMoving() {
     cancelAnimationFrame(this.animFrame);
     this.socket.send('pause');
+  }
+
+
+  private setMarkerSize() {
+    if(this.x_value < 15) {
+      this.markerSize = 100 - (this.x_value * 1.5);
+    }
+
+
+    else if(this.x_value > 65) {
+      this.markerSize = 100 - (this.x_value / 1.15);
+    }
+
+    else {
+      this.markerSize = 100 - this.x_value;
+    }
   }
 
 
