@@ -15,31 +15,26 @@ interface Coordinates {
 
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements AfterViewInit {
   @ViewChild("Graph", { static: true })  private Graph: ElementRef;
 
   connectionOpened = false;
+  incrementing = true;
 
   private animFrame: any;
+  socket: WebSocket;
 
-  socket: any;
-
-  private x_value = 10;
-  private y_value = 1;
-
-  incrementing = true;
+  x_value = 10;
+  y_value = 1;
 
   markerSize: number = 20;
 
-  ngOnInit(): void {
-
-  }
 
 
   openConnection() {
     this.socket = new WebSocket('ws://localhost:8080');
     this.socket.onerror = error => console.log('WebSocket error: ' + error);
-    this.socket.onclose = () => console.log('the server just closed the webSocket Connection');
+    this.socket.onclose = () => console.log('the client just closed the webSocket Connection');
     this.socket.onopen = () => {
       // this.startReceivingData();
       this.connectionOpened = true;
@@ -63,9 +58,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.socket.close()
     this.connectionOpened = false;
   }
-
-
-
 
 
 
@@ -134,6 +126,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // console.log('x value : ' , this.x_value)
     // console.log('y value : ' , this.y_value)
     // console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+
     this.setMarkerSize();
 
     Plotly.animate(this.Graph.nativeElement, {
@@ -148,11 +141,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         ]
     }, {
       transition: {
-        duration: 10,
+        duration: 0,
       },
       frame: {
-        duration: 10,
-        redraw: false,
+        duration: 0,
+        // redraw: false,
       }
     });
 
@@ -183,7 +176,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.markerSize = 100 - this.x_value;
     }
   }
-
 
 } //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 
