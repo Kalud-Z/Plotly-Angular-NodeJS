@@ -2,10 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 
-interface ImageData  {
-  rows: number[]
-}
-
 @Component({
   selector: 'app-binary-data',
   templateUrl: './binary-data.component.html',
@@ -14,84 +10,49 @@ interface ImageData  {
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 export class BinaryDataComponent implements OnInit{
-  currentIndex: number;
-  defaultColorValue = 150;
-  rowLength: number;
-  incrementing = false;
+  connectionOpened = false;
+  incrementing = true;
 
-  imageData = [
-    // [0 , 0 , 0 , 0 , this.defaultColorValue],
-    // [0 , 0 , 0 , 0 , this.defaultColorValue],
-    // [0 , 0 , 0 , 0 , this.defaultColorValue],
-    // [0 , 0 , 0 , 0 , this.defaultColorValue],
-    // [0 , 0 , 0 , 0 , this.defaultColorValue],
-  ]
+  private animFrame: any;
+  socket: WebSocket;
+  imageData = []
 
   ngOnInit(): void {
     // this.initializeImageData(256 , 256);
-    this.initializeImageData(25 , 70);
-
-    console.log(this.imageData);
-
-    this.rowLength = this.imageData[0].length;
-    this.currentIndex = this.rowLength - 1;
-
+    this.openConnection();
   }
 
-  initializeImageData(howManyRows: number, howManyCells: number) {
-    for(let i = 0; i < howManyRows ; i++) {
-      this.imageData.push([]);
-    }
-
-    for(let i = 0; i < howManyRows ; i++) {
-      for(let j = 0; j < howManyCells ; j++) {
-        this.imageData[i].push(0);
-      }
+  openConnection() {
+    this.socket = new WebSocket('ws://localhost:8080');
+    this.socket.onerror = error => console.log('WebSocket error: ' + error);
+    this.socket.onclose = () => console.log('the client just closed the webSocket Connection');
+    this.socket.onopen = () => {
+      // this.startReceivingData();
+      this.connectionOpened = true;
+      this.socket.onmessage = message => {
+        let data:any = JSON.parse(message.data);
+        console.log('data received : ' , data);
+        this.imageData = data.currentArray;
+      };
     }
   }
 
-  moveBarToLeft() {
-    console.log('moveBarToRight called');
-    this.imageData.forEach(row => {
-      for(let i = 0; i < row.length; i++) {
-        if(i === this.currentIndex - 1) { row[i] = this.defaultColorValue }
-        else { row[i] = 0 }
-      }
-    });
-    this.currentIndex--;
+
+  startReceivingData() {
+    this.socket.send('start');
   }
 
-  moveBarToRight() {
-    console.log('moveBarToRight called');
-    this.imageData.forEach(row => {
-      for(let i = 0; i < row.length; i++) {
-        if(i === this.currentIndex + 1) { row[i] = this.defaultColorValue }
-        else { row[i] = 0 }
-      }
-    });
-    this.currentIndex++;
+  stopMoving() {
+    cancelAnimationFrame(this.animFrame);
+    this.socket.send('pause');
   }
 
-  startMovingBar() {
-    setInterval(() => {
-      if(this.incrementing && this.currentIndex < this.rowLength) {
-        this.moveBarToRight()
-      }
-
-      if(!this.incrementing && this.currentIndex > 0) {
-        this.moveBarToLeft()
-      }
-
-      if(this.currentIndex === this.rowLength) {
-        this.incrementing = false;
-      }
-
-      else if(this.currentIndex === 0) {
-        this.incrementing = true;
-      }
-
-    }, 100)
+  closeConnection() {
+    this.socket.close()
+    this.connectionOpened = false;
   }
+
+
 
 } //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 

@@ -1,6 +1,16 @@
 
 <!--<img src="/assets/mmm.png">-->
 
+<div class="buttons-container">
+<!--    <button id="openConnection" (click)="openConnection()"> Open Connection </button>-->
+    <button id="start" [disabled]="!connectionOpened"  (click)="startReceivingData()"> START </button>
+    <button id="pause" [disabled]="!connectionOpened"  (click)="stopMoving()"> PAUSE </button>
+    <button id="closeConnection" [disabled]="!connectionOpened"  (click)="closeConnection()"> Close Connection </button>
+</div>
+
+
+<hr>
+
 
 <div class="rowsContainer">
     <div class="row" *ngFor="let row of imageData; let rowIndex = index">
@@ -15,7 +25,7 @@
 <hr>
 
 
-<button  (click)="startMovingBar()"> START </button>
+<!--<button  (click)="startMovingBar()"> START </button>-->
 
 
 
