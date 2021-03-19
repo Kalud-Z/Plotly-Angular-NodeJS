@@ -1,0 +1,38 @@
+
+
+.rowsContainer {
+  display : flex;
+  flex-direction: column;
+  border: 4px solid black;
+  width: fit-content;
+  padding: 1rem;
+}
+
+
+
+.row {
+  display: flex;
+  //border:3px solid yellow;
+}
+
+
+.cell {
+  padding: 1rem;
+  height: 30px;
+  width: 30px;
+  background-color: red;
+  border: 1px solid black;
+  opacity: 1;
+  color: rgb(0, 0, 0, 0.3);
+  //margin: 35px;
+}
+
+
+
+
+
+
+
+
+
+

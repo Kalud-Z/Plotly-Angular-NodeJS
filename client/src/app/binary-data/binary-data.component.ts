@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import * as _ from 'lodash';
+
+
+interface ImageData  {
+  rows: number[]
+}
 
 @Component({
   selector: 'app-binary-data',
@@ -7,27 +13,54 @@ import { Component, OnInit } from '@angular/core';
 })
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-export class BinaryDataComponent implements OnInit {
+export class BinaryDataComponent implements OnInit{
+  currentIndex: number;
+  defaultColorValue = 150;
+  rowLength: number;
 
-  constructor() { }
+  imageData = [
+    [0 , 0 , 0 , 0 , this.defaultColorValue],
+    [0 , 0 , 0 , 0 , this.defaultColorValue],
+    [0 , 0 , 0 , 0 , this.defaultColorValue],
+    [0 , 0 , 0 , 0 , this.defaultColorValue],
+    [0 , 0 , 0 , 0 , this.defaultColorValue],
+  ]
 
   ngOnInit(): void {
+    this.rowLength = this.imageData[0].length;
+    this.currentIndex = this.rowLength - 1;
+  }
+
+  moveBarToLeft() {
+    this.imageData.forEach(row => {
+      for(let i = 0; i < row.length; i++) {
+        if(i === this.currentIndex - 1) { row[i] = this.defaultColorValue }
+        else { row[i] = 0 }
+      }
+    });
+    this.currentIndex--;
+  }
+
+  moveBarToRight() {
+    this.imageData.forEach(row => {
+      for(let i = 0; i < row.length; i++) {
+        if(i === this.currentIndex + 1) { row[i] = this.defaultColorValue }
+        else { row[i] = 0 }
+      }
+    });
+    this.currentIndex++;
   }
 
 
-  image = [
-    [50 , 100 , 150 , 200],
-    [50 , 100 , 150 , 200],
-    [50 , 100 , 150 , 200],
-    [50 , 100 , 150 , 200],
-    [50 , 100 , 150 , 200],
-  ]
+  startMovingBar() {
+    setInterval(() => {
+      if(this.currentIndex <= this.rowLength) {
 
-  getColor(value: number): string {
-    if(value === 50) { return 'blue' }
-    if(value === 100) { return 'red' }
-    if(value === 150) { return 'yellow' }
-    if(value === 200) { return 'gray' }
+      }
+
+      if(this.currentIndex === 0) { this.moveBarToRight() }
+      if(this.currentIndex === this.rowLength) { this.moveBarToLeft() }
+    }, 100)
   }
 
 
@@ -35,3 +68,8 @@ export class BinaryDataComponent implements OnInit {
 
 
 } //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+
+
+export function getDeepCloneOf(target : any): any {
+  return  _.cloneDeep(target);
+}
