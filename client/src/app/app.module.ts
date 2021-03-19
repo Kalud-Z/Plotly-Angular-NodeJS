@@ -2,13 +2,28 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { BinaryDataComponent } from './binary-data/binary-data.component';
+import { PlotlyComponent } from './plotly/plotly.component';
+import { RouterModule, Routes } from '@angular/router';
+
+
+
+const appRoutes: Routes = [
+  { path: '', redirectTo: 'binary', pathMatch: 'full' },
+  { path : 'binary' , component : BinaryDataComponent },
+  { path : 'plotly' , component : PlotlyComponent },
+];
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BinaryDataComponent,
+    PlotlyComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

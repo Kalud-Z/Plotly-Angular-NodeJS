@@ -1,19 +1,4 @@
 
-
-<div class="buttons-container">
-    <button id="openConnection" (click)="openConnection()"> Open Connection </button>
-    <button id="start" [disabled]="!connectionOpened"  (click)="startReceivingData()"> START </button>
-    <button id="pause" [disabled]="!connectionOpened"  (click)="stopMoving()"> PAUSE </button>
-    <button id="closeConnection" [disabled]="!connectionOpened"  (click)="closeConnection()"> Close Connection </button>
-</div>
-
-<div id="content"></div>
-
-<hr>
-
-<div id="graph" #Graph></div>
-
-<!--<button (click)="startMoving()"> start Moving! </button>-->
-<!--<button (click)="stopMoving()"> stop Moving! </button>-->
-
+<router-outlet></router-outlet>
+<p> main app </p>
 
