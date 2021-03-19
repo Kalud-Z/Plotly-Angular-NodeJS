@@ -1,4 +1,9 @@
 
+:host {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 
 .rowsContainer {
   display : flex;
@@ -17,7 +22,7 @@
 
 
 .cell {
-  //padding: 1rem;
+  padding: 0.5rem;
   height: 1px;
   width: 1px;
   //background-color: red;

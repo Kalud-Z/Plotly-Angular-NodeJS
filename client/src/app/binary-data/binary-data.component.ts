@@ -28,7 +28,8 @@ export class BinaryDataComponent implements OnInit{
   ]
 
   ngOnInit(): void {
-    this.initializeImageData(256 , 256);
+    // this.initializeImageData(256 , 256);
+    this.initializeImageData(25 , 70);
 
     console.log(this.imageData);
 
