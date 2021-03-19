@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { BinaryDataComponent } from './binary-data/binary-data.component';
 import { PlotlyComponent } from './plotly/plotly.component';
 import { RouterModule, Routes } from '@angular/router';
+import { GetColorDirective } from './binary-data/get-color.directive';
 
 
 
@@ -19,7 +20,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     BinaryDataComponent,
-    PlotlyComponent
+    PlotlyComponent,
+    GetColorDirective
   ],
   imports: [
     BrowserModule,

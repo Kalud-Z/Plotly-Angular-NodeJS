@@ -17,21 +17,40 @@ export class BinaryDataComponent implements OnInit{
   currentIndex: number;
   defaultColorValue = 150;
   rowLength: number;
+  incrementing = false;
 
   imageData = [
-    [0 , 0 , 0 , 0 , this.defaultColorValue],
-    [0 , 0 , 0 , 0 , this.defaultColorValue],
-    [0 , 0 , 0 , 0 , this.defaultColorValue],
-    [0 , 0 , 0 , 0 , this.defaultColorValue],
-    [0 , 0 , 0 , 0 , this.defaultColorValue],
+    // [0 , 0 , 0 , 0 , this.defaultColorValue],
+    // [0 , 0 , 0 , 0 , this.defaultColorValue],
+    // [0 , 0 , 0 , 0 , this.defaultColorValue],
+    // [0 , 0 , 0 , 0 , this.defaultColorValue],
+    // [0 , 0 , 0 , 0 , this.defaultColorValue],
   ]
 
   ngOnInit(): void {
+    this.initializeImageData(256 , 256);
+
+    console.log(this.imageData);
+
     this.rowLength = this.imageData[0].length;
     this.currentIndex = this.rowLength - 1;
+
+  }
+
+  initializeImageData(howManyRows: number, howManyCells: number) {
+    for(let i = 0; i < howManyRows ; i++) {
+      this.imageData.push([]);
+    }
+
+    for(let i = 0; i < howManyRows ; i++) {
+      for(let j = 0; j < howManyCells ; j++) {
+        this.imageData[i].push(0);
+      }
+    }
   }
 
   moveBarToLeft() {
+    console.log('moveBarToRight called');
     this.imageData.forEach(row => {
       for(let i = 0; i < row.length; i++) {
         if(i === this.currentIndex - 1) { row[i] = this.defaultColorValue }
@@ -42,6 +61,7 @@ export class BinaryDataComponent implements OnInit{
   }
 
   moveBarToRight() {
+    console.log('moveBarToRight called');
     this.imageData.forEach(row => {
       for(let i = 0; i < row.length; i++) {
         if(i === this.currentIndex + 1) { row[i] = this.defaultColorValue }
@@ -51,21 +71,26 @@ export class BinaryDataComponent implements OnInit{
     this.currentIndex++;
   }
 
-
   startMovingBar() {
     setInterval(() => {
-      if(this.currentIndex <= this.rowLength) {
-
+      if(this.incrementing && this.currentIndex < this.rowLength) {
+        this.moveBarToRight()
       }
 
-      if(this.currentIndex === 0) { this.moveBarToRight() }
-      if(this.currentIndex === this.rowLength) { this.moveBarToLeft() }
+      if(!this.incrementing && this.currentIndex > 0) {
+        this.moveBarToLeft()
+      }
+
+      if(this.currentIndex === this.rowLength) {
+        this.incrementing = false;
+      }
+
+      else if(this.currentIndex === 0) {
+        this.incrementing = true;
+      }
+
     }, 100)
   }
-
-
-
-
 
 } //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 

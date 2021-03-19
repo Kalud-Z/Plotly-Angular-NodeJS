@@ -19,7 +19,7 @@ export class GetColorDirective {
 
 
   getColor(value: number): string {
-    if(value === 0) { return 'white' }
+    if(value === 0) { return 'blue' }
     if(value === 50) { return 'blue' }
     if(value === 100) { return 'red' }
     if(value === 150) { return 'yellow' }
