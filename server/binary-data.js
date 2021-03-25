@@ -62,7 +62,7 @@ function startSendingData() {
         sendData();
     }, 100)
     // <= 40ms  : a lot of lagging and the 'pause' doesnt work !
-    // the higher the frequency the more time it takes to pause , when pause clicked.
+    // the higher the frequency the     more time it takes to pause , when pause clicked.
 }
 
 function sendData() {
