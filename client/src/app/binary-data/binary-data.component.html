@@ -12,11 +12,20 @@
 <hr>
 
 
+<!--<div class="rowsContainer">-->
+<!--    <div class="row" *ngFor="let row of imageData; let rowIndex = index">-->
+<!--        <div class="cell" appGetColor [colorValue]="cell"  *ngFor="let cell of row; let cellIndex = index"> </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div class="rowsContainer">
-    <div class="row" *ngFor="let row of imageData; let rowIndex = index">
-        <div class="cell" appGetColor [colorValue]="cell"  *ngFor="let cell of row; let cellIndex = index"> </div>
+    <div class="row" *ngFor="let row of imageData; trackBy: trackById; let rowIndex = index">
+        <div class="cell" [style.background-color]="determineColor(cell.value)"
+             *ngFor="let cell of row.cells; trackBy: trackById; let cellIndex = index">
+        </div>
     </div>
 </div>
+
 
 
 <hr>

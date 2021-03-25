@@ -11,7 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "js-image-generator": "^1.0.3",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "sjotorp-image": "^1.2.0",
+    "uniqid": "^5.3.0",
     "websocket": "^1.0.33"
   }
 }

@@ -1,3 +1,8 @@
+let _ = require('lodash');
+let moment = require('moment');
+let uniqid = require('uniqid');
+
+
 let server  = require('websocket').server;
 let http    = require('http');
 
@@ -11,6 +16,11 @@ const PORT = 8080;
 let connection;
 let interval;
 
+const ROWS = 50
+const CELLS = 150
+const FREQUENCY = 10;
+
+let startTime;
 
 
 let socket = new server({
@@ -39,28 +49,47 @@ socket.on('request', request => {
 function init() {
     imageData = [];
     incrementing = false;
-    initializeImageData(20 , 60);
-    rowLength = imageData[0].length;
+    initializeImageData(ROWS , CELLS);
+    // rowLength = imageData[0].length;
+    rowLength = imageData[0].cells.length;
     currentIndex = rowLength - 1;
+    console.log('this is rowLength : ' , rowLength)
+    console.log('this is current index : ' , currentIndex)
     sendData();
 }
 
 function initializeImageData(howManyRows, howManyCells) {
-    for(let i = 0; i < howManyRows ; i++) { imageData.push([]) }
+    // for(let i = 0; i < howManyRows ; i++) { imageData.push([]) }
+    //
+    // for(let i = 0; i < howManyRows ; i++) {
+    //     for(let j = 0; j < howManyCells ; j++) { imageData[i].push(0) }
+    // }
+
+    for(let i = 0; i < howManyRows; i++) {
+        let rowObj = { id: 'row-'+uniqid(), cells : [] }
+        imageData.push(rowObj);
+    }
 
     for(let i = 0; i < howManyRows ; i++) {
-        for(let j = 0; j < howManyCells ; j++) { imageData[i].push(0) }
+        for(let j = 0; j < howManyCells ; j++) {
+            let point = {
+                id: 'cell-' + uniqid(),
+                value: 0,
+            }
+            imageData[i].cells.push(point);
+        }
     }
 }
 
 function startSendingData() {
     interval = setInterval(() => {
+        startTime = new Date();
         if(incrementing && currentIndex < rowLength) { moveBarToRight() }
         if(!incrementing && currentIndex > 0) { moveBarToLeft() }
         if(currentIndex === rowLength) { incrementing = false }
         else if(currentIndex === 0) { incrementing = true }
         sendData();
-    }, 100)
+    }, FREQUENCY)
     // <= 40ms  : a lot of lagging and the 'pause' doesnt work !
     // the higher the frequency the     more time it takes to pause , when pause clicked.
 }
@@ -76,23 +105,38 @@ function stopSendingData() {
 
 function moveBarToLeft() {
     console.log('moveBarToLeft called');
-    imageData.forEach(row => {
-        for(let i = 0; i < row.length; i++) {
-            if(i === currentIndex - 1) { row[i] = defaultColorValue }
-            else { row[i] = 0 }
+
+    let tempArray = getDeepCloneOf(imageData);
+
+    tempArray.forEach(row => {
+        for(let i = 0; i < row.cells.length; i++) {
+            if(i === currentIndex - 1) { console.log('to the left. assigned now'); row.cells[i].value = defaultColorValue }
+            else { row.cells[i].value = 0 }
         }
     });
+
+    imageData = tempArray;
     currentIndex--;
 }
 
 function moveBarToRight() {
     console.log('moveBarToRight called');
-    imageData.forEach(row => {
-        for(let i = 0; i < row.length; i++) {
-            if(i === currentIndex + 1) { row[i] = defaultColorValue }
-            else { row[i] = 0 }
+
+    let tempArray = getDeepCloneOf(imageData);
+
+    tempArray.forEach(row => {
+        for(let i = 0; i < row.cells.length; i++) {
+            if(i === currentIndex + 1) { row.cells[i].value = defaultColorValue }
+            else { row.cells[i].value = 0 }
         }
     });
+
+    imageData = tempArray;
     currentIndex++;
 }
 
+
+
+function getDeepCloneOf(target) {
+    return  _.cloneDeep(target);
+}
