@@ -21,6 +21,8 @@ const CELLS = 150
 const FREQUENCY = 10;
 
 let startTime;
+timesArrayChanged = 0;
+
 
 
 let socket = new server({
@@ -53,18 +55,10 @@ function init() {
     // rowLength = imageData[0].length;
     rowLength = imageData[0].cells.length;
     currentIndex = rowLength - 1;
-    console.log('this is rowLength : ' , rowLength)
-    console.log('this is current index : ' , currentIndex)
     sendData();
 }
 
 function initializeImageData(howManyRows, howManyCells) {
-    // for(let i = 0; i < howManyRows ; i++) { imageData.push([]) }
-    //
-    // for(let i = 0; i < howManyRows ; i++) {
-    //     for(let j = 0; j < howManyCells ; j++) { imageData[i].push(0) }
-    // }
-
     for(let i = 0; i < howManyRows; i++) {
         let rowObj = { id: 'row-'+uniqid(), cells : [] }
         imageData.push(rowObj);
@@ -82,13 +76,26 @@ function initializeImageData(howManyRows, howManyCells) {
 }
 
 function startSendingData() {
+    startTime = new Date();
+
     interval = setInterval(() => {
-        startTime = new Date();
         if(incrementing && currentIndex < rowLength) { moveBarToRight() }
         if(!incrementing && currentIndex > 0) { moveBarToLeft() }
         if(currentIndex === rowLength) { incrementing = false }
         else if(currentIndex === 0) { incrementing = true }
         sendData();
+
+        let timePassed = getTimePassed();
+        if(timePassed >= 5000) {
+            stopSendingData();
+            console.log('Configured Frequency : ', FREQUENCY, ' ms')
+            console.log('time passed : ', timePassed);
+            const NrOfIterations_desiredValue = Math.round(timePassed * (1 / FREQUENCY))
+            console.log('Nr of iterations [Desired Value]  : ', NrOfIterations_desiredValue);
+            console.log('Nr of iterations [Actual Value]   : ', timesArrayChanged);
+            console.log('Nr of iterations missing   : ', NrOfIterations_desiredValue - timesArrayChanged);
+        }
+
     }, FREQUENCY)
     // <= 40ms  : a lot of lagging and the 'pause' doesnt work !
     // the higher the frequency the     more time it takes to pause , when pause clicked.
@@ -104,23 +111,25 @@ function stopSendingData() {
 }
 
 function moveBarToLeft() {
-    console.log('moveBarToLeft called');
+    // console.log('moveBarToLeft called');
 
     let tempArray = getDeepCloneOf(imageData);
 
     tempArray.forEach(row => {
         for(let i = 0; i < row.cells.length; i++) {
-            if(i === currentIndex - 1) { console.log('to the left. assigned now'); row.cells[i].value = defaultColorValue }
+            if(i === currentIndex - 1) { row.cells[i].value = defaultColorValue }
             else { row.cells[i].value = 0 }
         }
     });
 
     imageData = tempArray;
+    timesArrayChanged++;
+
     currentIndex--;
 }
 
 function moveBarToRight() {
-    console.log('moveBarToRight called');
+    // console.log('moveBarToRight called');
 
     let tempArray = getDeepCloneOf(imageData);
 
@@ -132,6 +141,7 @@ function moveBarToRight() {
     });
 
     imageData = tempArray;
+    timesArrayChanged++;
     currentIndex++;
 }
 
@@ -139,4 +149,12 @@ function moveBarToRight() {
 
 function getDeepCloneOf(target) {
     return  _.cloneDeep(target);
+}
+
+
+function getTimePassed() {
+    let start = moment(startTime);
+    let currentTime = moment(new Date());
+    const gg = currentTime.diff(start , 'ms')
+    return  gg; // 1
 }

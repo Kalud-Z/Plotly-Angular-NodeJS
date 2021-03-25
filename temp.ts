@@ -119,9 +119,6 @@ export class BinaryDataComponent implements OnInit{
 
   startMovingBar() {
     this.startTime = new Date();
-
-
-
     this.interval =  setInterval(() => {
       if(this.incrementing && this.currentIndex < this.rowLength) { this.moveBarToRight() }
 
