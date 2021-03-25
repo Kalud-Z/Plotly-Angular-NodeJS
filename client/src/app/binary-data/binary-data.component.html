@@ -14,10 +14,7 @@
 
 <div class="rowsContainer">
     <div class="row" *ngFor="let row of imageData; let rowIndex = index">
-
-        <div class="cell" appGetColor [colorValue]="cell"  *ngFor="let cell of row; let cellIndex = index">
-<!--             {{ rowIndex  }} . {{ cellIndex }}-->
-        </div>
+        <div class="cell" appGetColor [colorValue]="cell"  *ngFor="let cell of row; let cellIndex = index"> </div>
     </div>
 </div>
 

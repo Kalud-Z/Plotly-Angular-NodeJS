@@ -9,11 +9,10 @@ export class GetColorDirective {
   finalColor: string;
   @Input() colorValue: number;
 
-  constructor(private elRef : ElementRef, private renderer : Renderer2) { }
+  constructor(private elRef: ElementRef, private renderer: Renderer2) { }
 
   ngOnInit() {
     const targetElement  = this.elRef.nativeElement;
-
     this.renderer.setStyle(targetElement, 'background', this.getColor(this.colorValue));
   }
 

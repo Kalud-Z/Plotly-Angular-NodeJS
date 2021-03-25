@@ -13,7 +13,7 @@ export class BinaryDataComponent implements OnInit{
   connectionOpened = false;
   incrementing = true;
 
-  private animFrame: any;
+  // private animFrame: any;
   socket: WebSocket;
   imageData = []
 
@@ -31,7 +31,8 @@ export class BinaryDataComponent implements OnInit{
       this.connectionOpened = true;
       this.socket.onmessage = message => {
         let data:any = JSON.parse(message.data);
-        console.log('data received : ' , data);
+        // console.log('data received : ' , data);
+        console.log('data received.');
         this.imageData = data.currentArray;
       };
     }
@@ -43,7 +44,7 @@ export class BinaryDataComponent implements OnInit{
   }
 
   stopMoving() {
-    cancelAnimationFrame(this.animFrame);
+    // cancelAnimationFrame(this.animFrame);
     this.socket.send('pause');
   }
 
@@ -55,6 +56,10 @@ export class BinaryDataComponent implements OnInit{
 
 
 } //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+
+
+
+
 
 
 export function getDeepCloneOf(target : any): any {
