@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-// var uniqid = require('uniqid');
-
+import * as moment from 'moment';
 import uniqid from 'uniqid'
 
+
+
 const ROWS = 50
-const CELLS = 100
-const FREQUENCY = 10
+const CELLS = 150
+const FREQUENCY = 10 // ms
 
 interface RowObj {
   id: string;
@@ -17,7 +18,6 @@ interface Point {
   id: string;
   value: number;
 }
-
 
 
 @Component({
@@ -32,13 +32,11 @@ export class BinaryDataComponent implements OnInit{
   defaultColorValue = 150;
   rowLength: number;
   incrementing = false;
-
+  startTime: Date;
 
   interval;
   timesIntervalCalled: number = 0;
   timesArrayChanged: number = 0;
-
-
 
   imageData = [
     // [0 , 0 , 0 , 0 , this.defaultColorValue],
@@ -48,7 +46,6 @@ export class BinaryDataComponent implements OnInit{
     // [0 , 0 , 0 , 0 , this.defaultColorValue],
   ]
 
-  // imageData =;
 
   ngOnInit(): void {
     this.initializeImageData(ROWS , CELLS);
@@ -96,7 +93,7 @@ export class BinaryDataComponent implements OnInit{
     this.imageData = tempArray;
 
     this.timesArrayChanged++;
-    console.log('array changed : ' , this.timesArrayChanged)
+    // console.log('array changed : ' , this.timesArrayChanged)
 
     this.currentIndex--;
   }
@@ -116,20 +113,20 @@ export class BinaryDataComponent implements OnInit{
     this.imageData = tempArray;
     this.timesArrayChanged++;
     // console.log('array changed. moved to the right')
-    console.log('array changed : ' , this.timesArrayChanged)
+    // console.log('array changed : ' , this.timesArrayChanged)
     this.currentIndex++;
   }
 
-  startMovingBar() {
-    this.interval =  setInterval(() => {
-      // console.log('interval called : ' , ++this.timesIntervalCalled)
-      if(this.incrementing && this.currentIndex < this.rowLength) {
-        this.moveBarToRight()
-      }
 
-      if(!this.incrementing && this.currentIndex > 0) {
-        this.moveBarToLeft()
-      }
+  startMovingBar() {
+    this.startTime = new Date();
+
+
+
+    this.interval =  setInterval(() => {
+      if(this.incrementing && this.currentIndex < this.rowLength) { this.moveBarToRight() }
+
+      if(!this.incrementing && this.currentIndex > 0) { this.moveBarToLeft() }
 
       if(this.currentIndex === this.rowLength) {
         this.incrementing = false;
@@ -139,7 +136,16 @@ export class BinaryDataComponent implements OnInit{
         this.incrementing = true;
       }
 
-      // this.stopMoving();
+      let timePassed = this.getTimePassed();
+      if(timePassed >= 5000) {
+        this.stopMoving();
+        console.log('Configured Frequency : ' , FREQUENCY , ' ms')
+        console.log('time passed : ' , timePassed);
+        const NrOfIterations_desiredValue = Math.round(timePassed * (1 / FREQUENCY))
+        console.log('Nr of iterations [Desired Value]  : ' , NrOfIterations_desiredValue);
+        console.log('Nr of iterations [Actual Value]   : ' , this.timesArrayChanged);
+        console.log('Nr of iterations missing   : ' , NrOfIterations_desiredValue - this.timesArrayChanged);
+      }
     }, FREQUENCY)
   }
 
@@ -163,6 +169,12 @@ export class BinaryDataComponent implements OnInit{
     if(value === 150) { return 'yellow' }
     if(value === 200) { return 'gray' }
     if(value === 250) { return 'pink' }
+  }
+
+  private getTimePassed(): number {
+    let start = moment(this.startTime);
+    let currentTime = moment(new Date());
+    return currentTime.diff(start , 'ms') // 1
   }
 
 

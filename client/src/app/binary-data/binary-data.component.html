@@ -4,7 +4,6 @@
 
 <div class="rowsContainer">
     <div class="row" *ngFor="let row of imageData; trackBy: trackById; let rowIndex = index">
-<!--        <div class="cell" [style]="" appGetColor [colorValue]="cell.value"-->
         <div class="cell" [style.background-color]="determineColor(cell.value)"
              *ngFor="let cell of row.cells; trackBy: trackById; let cellIndex = index">
         </div>
@@ -15,7 +14,7 @@
 <hr>
 
 
-<button  (click)="startMovingBar()"> START </button>
+<button   (click)="startMovingBar()"> START </button>
 <button  (click)="stopMoving()"> STOP </button>
 
 
