@@ -1,12 +1,12 @@
 
-<img src="/assets/mmm.png">
+<!--<img src="/assets/mmm.png">-->
 
 
 <div class="rowsContainer">
-    <div class="row" *ngFor="let row of imageData; let rowIndex = index">
-
-        <div class="cell" appGetColor [colorValue]="cell"  *ngFor="let cell of row; let cellIndex = index">
-<!--             {{ rowIndex  }} . {{ cellIndex }}-->
+    <div class="row" *ngFor="let row of imageData; trackBy: trackById; let rowIndex = index">
+<!--        <div class="cell" [style]="" appGetColor [colorValue]="cell.value"-->
+        <div class="cell" [style.background-color]="determineColor(cell.value)"
+             *ngFor="let cell of row.cells; trackBy: trackById; let cellIndex = index">
         </div>
     </div>
 </div>
@@ -16,6 +16,7 @@
 
 
 <button  (click)="startMovingBar()"> START </button>
+<button  (click)="stopMoving()"> STOP </button>
 
 
 

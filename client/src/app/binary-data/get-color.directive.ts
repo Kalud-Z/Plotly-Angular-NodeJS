@@ -12,6 +12,7 @@ export class GetColorDirective {
   constructor(private elRef : ElementRef, private renderer : Renderer2) { }
 
   ngOnInit() {
+    console.log('__inside appGetColor__')
     const targetElement  = this.elRef.nativeElement;
 
     this.renderer.setStyle(targetElement, 'background', this.getColor(this.colorValue));
