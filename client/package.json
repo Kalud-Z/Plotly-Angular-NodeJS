@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~11.0.4",
     "@angular/router": "~11.0.4",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "plotly.js": "^1.47.4",
     "plotly.js-dist": "^1.58.4",
     "rxjs": "~6.6.0",

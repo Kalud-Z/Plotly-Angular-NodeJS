@@ -3,6 +3,7 @@
 
 <div class="buttons-container">
 <!--    <button id="openConnection" (click)="openConnection()"> Open Connection </button>-->
+    <div class="timer" > {{ timePassed }} </div>
     <button id="start" [disabled]="!connectionOpened"  (click)="startReceivingData()"> START </button>
     <button id="pause" [disabled]="!connectionOpened"  (click)="stopMoving()"> PAUSE </button>
     <button id="closeConnection" [disabled]="!connectionOpened"  (click)="closeConnection()"> Close Connection </button>

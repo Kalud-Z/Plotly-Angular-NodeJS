@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+
 
 
 @Component({
@@ -16,6 +18,9 @@ export class BinaryDataComponent implements OnInit{
   // private animFrame: any;
   socket: WebSocket;
   imageData = []
+  private receivedData = 0;
+  timePassed: number;
+  startTime: Date;
 
   ngOnInit(): void {
     // this.initializeImageData(256 , 256);
@@ -30,10 +35,15 @@ export class BinaryDataComponent implements OnInit{
       // this.startReceivingData();
       this.connectionOpened = true;
       this.socket.onmessage = message => {
+        this.receivedData++;
+        if(this.receivedData === 1) {
+          this.startTime = new Date();
+        }
         let data:any = JSON.parse(message.data);
-        // console.log('data received : ' , data);
-        console.log('data received.');
+        console.log('receivedData : ' , this.receivedData);
+        // console.log('data received.');
         this.imageData = data.currentArray;
+        this.timePassed = this.getTimePassed();
       };
     }
   }
@@ -69,6 +79,16 @@ export class BinaryDataComponent implements OnInit{
     // console.log('trackbyId is called')
     return item.id;
   }
+
+
+  getTimePassed() {
+    let start = moment(this.startTime);
+    let currentTime = moment(new Date());
+    const gg = currentTime.diff(start , 'ms')
+    return  gg; // 1
+  }
+
+
 
 
 } //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
