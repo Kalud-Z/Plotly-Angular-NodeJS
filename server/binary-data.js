@@ -18,7 +18,8 @@ let interval;
 
 const ROWS = 50
 const CELLS = 150
-const FREQUENCY = 10;
+const PERIOD = 100;
+const STOP_INTERVAL_AFTER = 5000;
 
 let startTime;
 timesArrayChanged = 0;
@@ -37,7 +38,7 @@ socket.on('request', request => {
     connection.on('message', message => {
         console.log('this is message received from the client : ' , message.utf8Data);
         if(message.utf8Data === 'start') { startSendingData() }
-        if(message.utf8Data === 'pause') { stopSendingData() }
+        if(message.utf8Data === 'pause') { stopSendingData()  }
     });
 
     connection.on('close', connection => {
@@ -86,17 +87,17 @@ function startSendingData() {
         sendData();
 
         let timePassed = getTimePassed();
-        if(timePassed >= 5000) {
+        if(timePassed >= STOP_INTERVAL_AFTER) {
             stopSendingData();
-            console.log('Configured Frequency : ', FREQUENCY, ' ms')
+            console.log('Configured Period : ', PERIOD, ' ms')
             console.log('time passed : ', timePassed);
-            const NrOfIterations_desiredValue = Math.round(timePassed * (1 / FREQUENCY))
+            const NrOfIterations_desiredValue = Math.round(timePassed * (1 / PERIOD))
             console.log('Nr of iterations [Desired Value]  : ', NrOfIterations_desiredValue);
             console.log('Nr of iterations [Actual Value]   : ', timesArrayChanged);
             console.log('Nr of iterations missing   : ', NrOfIterations_desiredValue - timesArrayChanged);
         }
 
-    }, FREQUENCY)
+    }, PERIOD)
     // <= 40ms  : a lot of lagging and the 'pause' doesnt work !
     // the higher the frequency the     more time it takes to pause , when pause clicked.
 }
