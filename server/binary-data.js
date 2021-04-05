@@ -17,8 +17,8 @@ const PORT = 8080;
 let connection;
 let interval;
 
-const ROWS = 50
-const CELLS = 150
+const ROWS = 32
+const CELLS = 128
 const PERIOD = 10;
 const STOP_INTERVAL_AFTER = 2000;
 
@@ -35,7 +35,7 @@ console.log('listening on port : ' , PORT);
 
 socket.on('request', request => {
     connection = request.accept(null, request.origin);
-    // init();
+    init();
     console.log('client just opened webSocket connection');
     connection.on('message', message => {
         console.log('this is message received from the client : ' , message.utf8Data);

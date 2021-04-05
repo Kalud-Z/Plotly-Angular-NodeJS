@@ -36,13 +36,13 @@ export class BinaryDataComponent implements OnInit{
       this.connectionOpened = true;
       this.socket.onmessage = message => {
         this.receivedData++;
-        if(this.receivedData === 1) {
+        if(this.receivedData === 2) {
           this.startTime = new Date();
         }
         let data:any = JSON.parse(message.data);
         console.log('receivedData : ' , this.receivedData);
         // console.log('data received.');
-        this.imageData = data.currentArray;
+        this.imageData  = data.currentArray;
         this.timePassed = this.getTimePassed();
       };
     }
