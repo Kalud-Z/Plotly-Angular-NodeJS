@@ -6,6 +6,7 @@ import { BinaryDataComponent } from './binary-data/binary-data.component';
 import { PlotlyComponent } from './plotly/plotly.component';
 import { RouterModule, Routes } from '@angular/router';
 import { GetColorDirective } from './binary-data/get-color.directive';
+import { HeatmapJSComponent } from './heatmap-js/heatmap-js.component';
 
 
 
@@ -13,6 +14,7 @@ const appRoutes: Routes = [
   { path: '', redirectTo: 'binary', pathMatch: 'full' },
   { path : 'binary' , component : BinaryDataComponent },
   { path : 'plotly' , component : PlotlyComponent },
+  { path : 'heatmapjs' , component : HeatmapJSComponent },
 ];
 
 
@@ -21,7 +23,8 @@ const appRoutes: Routes = [
     AppComponent,
     BinaryDataComponent,
     PlotlyComponent,
-    GetColorDirective
+    GetColorDirective,
+    HeatmapJSComponent
   ],
   imports: [
     BrowserModule,

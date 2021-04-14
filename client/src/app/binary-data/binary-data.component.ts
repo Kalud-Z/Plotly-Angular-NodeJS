@@ -98,7 +98,6 @@ export class BinaryDataComponent implements OnInit {
 
 
 
-
 export function getDeepCloneOf(target : any): any {
   return  _.cloneDeep(target);
 }

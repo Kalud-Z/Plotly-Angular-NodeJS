@@ -25,7 +25,12 @@ cells: [ //cells of each row.
 }
 
 
+-------------------------------------------------------------------------------------------------------------
 
+heatmapJS : 
+this is the data format : 
+array of object_X
+ object_X ==>  {x: 608, y: 35, value: 251}
 
 
 

@@ -19,6 +19,8 @@
     "@angular/platform-browser": "~11.0.4",
     "@angular/platform-browser-dynamic": "~11.0.4",
     "@angular/router": "~11.0.4",
+    "@types/heatmap.js": "^2.0.35",
+    "heatmap.js": "^2.0.5",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "plotly.js": "^1.47.4",
