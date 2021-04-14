@@ -1,0 +1,32 @@
+data format :
+
+
+array of object_X :
+
+
+object_X = {
+
+id: "row-7e7dzufvoknh8wdgb",
+cells: [ //cells of each row.
+      {
+        "id": "cell-7e7dzufvoknh8wdh7",
+        "value": 255
+      },
+      
+      {
+        "id": "cell-7e7dzufvoknh8wdkp",
+        "value": 100
+      },
+      {
+        "id": "cell-7e7dzufvoknh8wdkq",
+        "value": 0
+      }
+
+}
+
+
+
+
+
+
+

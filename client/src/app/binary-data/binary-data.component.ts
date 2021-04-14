@@ -11,7 +11,7 @@ import * as moment from 'moment';
 })
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-export class BinaryDataComponent implements OnInit{
+export class BinaryDataComponent implements OnInit {
   connectionOpened = false;
   incrementing = true;
 
@@ -43,6 +43,7 @@ export class BinaryDataComponent implements OnInit{
         console.log('receivedData : ' , this.receivedData);
         // console.log('data received.');
         this.imageData  = data.currentArray;
+        console.log('this is ht e data : ' , this.imageData);
         this.timePassed = this.getTimePassed();
       };
     }
@@ -101,3 +102,6 @@ export class BinaryDataComponent implements OnInit{
 export function getDeepCloneOf(target : any): any {
   return  _.cloneDeep(target);
 }
+
+
+
